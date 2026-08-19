@@ -530,8 +530,41 @@ void RDxfImporter::importEntity(QSharedPointer<REntity> entity) {
     }
 
     if (RSettings::isXDataEnabled()) {
-        // TODO:
-        //importXData(odEntity, entity);
+        // CaveCAD: turn foreign XDATA blocks into custom properties --
+        // the counterpart of RDxfExporter::writeCustomProperties. Each
+        // 1001 application id becomes a property title; its 1000
+        // strings are "key=value" records. Consumed entries are
+        // removed so a later entity without its own XDATA cannot
+        // inherit them; ACAD/QCAD blocks stay for the stock handlers.
+        QStringList consumedAppIds;
+        QMap<QString, QList<QPair<int, QVariant> > >::iterator xit;
+        for (xit = xData.begin(); xit != xData.end(); ++xit) {
+            QString appId = xit.key();
+            if (appId.isEmpty() || appId == "ACAD" || appId == "QCAD") {
+                continue;
+            }
+            QList<QPair<int, QVariant> >& list = xit.value();
+            bool used = false;
+            for (int xi = 0; xi < list.length(); xi++) {
+                if (list[xi].first != 1000) {
+                    continue;
+                }
+                QString record = list[xi].second.toString();
+                int eq = record.indexOf('=');
+                if (eq <= 0) {
+                    continue;
+                }
+                entity->setCustomProperty(appId, record.left(eq),
+                    record.mid(eq + 1));
+                used = true;
+            }
+            if (used) {
+                consumedAppIds.append(appId);
+            }
+        }
+        for (int ci = 0; ci < consumedAppIds.length(); ci++) {
+            xData.remove(consumedAppIds[ci]);
+        }
     }
 
     //qDebug() << "RDxfImporter::importEntity" << *entity;

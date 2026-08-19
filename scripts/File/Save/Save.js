@@ -87,6 +87,20 @@ Save.prototype.save = function(fileName, fileVersion, overwriteWarning) {
 
     fileVersion = isNull(fileVersion) ? "" : fileVersion;
 
+    // CaveCAD: a document with no stored format saves through the
+    // dxflib writer, which persists custom properties (survey data)
+    // as XDATA. An explicitly chosen format (Save As) is honored --
+    // the survey data store inside the drawing covers those files.
+    if (fileVersion.length===0 && fileName.toLowerCase().endsWith(".dxf")) {
+        var vFilters = RFileExporterRegistry.getFilterStrings();
+        for (var vfi=0; vfi<vFilters.length; ++vfi) {
+            if (vFilters[vfi].contains("dxflib") && vFilters[vfi].contains("*.dxf")) {
+                fileVersion = vFilters[vfi];
+                break;
+            }
+        }
+    }
+
     fileName = di.getCorrectedFileName(fileName, fileVersion);
 
     var saveAs = false;

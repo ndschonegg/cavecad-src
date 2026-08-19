@@ -115,7 +115,15 @@ SaveAs.prototype.beginEvent = function() {
             for (i=0; i<filterStrings.length; ++i) {
                 // for DXF, DWG:
                 if (suffix==="dxf" || suffix==="dwg") {
-                    if (filterStrings[i].contains("R27") && filterStrings[i].contains("*." + suffix)) {
+                    // CaveCAD: prefer the dxflib writer for DXF -- it is
+                    // the one that persists custom properties (survey
+                    // data) as XDATA; fall through to R27 for DWG.
+                    if (suffix==="dxf" && filterStrings[i].contains("dxflib")) {
+                        fileDialog.selectNameFilter(filterStrings[i]);
+                        found = true;
+                        break;
+                    }
+                    if (suffix==="dwg" && filterStrings[i].contains("R27") && filterStrings[i].contains("*.dwg")) {
                         fileDialog.selectNameFilter(filterStrings[i]);
                         found = true;
                         break;
@@ -139,9 +147,10 @@ SaveAs.prototype.beginEvent = function() {
         else {
             // preselect configured name filter:
             if (defaultNameFilter.length===0) {
-                // preselect default name filter DXF R27:
+                // CaveCAD: preselect the dxflib DXF writer -- the one
+                // that persists custom properties (survey data):
                 for (i=0; i<filterStrings.length; ++i) {
-                    if (filterStrings[i].contains("R27") && filterStrings[i].contains("*.dxf")) {
+                    if (filterStrings[i].contains("dxflib") && filterStrings[i].contains("*.dxf")) {
                         fileDialog.selectNameFilter(filterStrings[i]);
                         break;
                     }

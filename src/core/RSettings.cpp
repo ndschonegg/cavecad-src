@@ -132,7 +132,9 @@ QSettings* RSettings::qSettings = NULL;
 QStringList RSettings::originalArguments;
 
 bool RSettings::quitFlag = false;
-bool RSettings::xDataEnabled = false;
+// CaveCAD: XDATA on by default -- the survey suite persists its
+// custom properties through it (see RDxfImporter/RDxfExporter).
+bool RSettings::xDataEnabled = true;
 bool RSettings::nextVersionEnabled = false;
 
 bool RSettings::firstStart = false;

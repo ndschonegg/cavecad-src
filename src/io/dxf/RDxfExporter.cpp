@@ -264,9 +264,36 @@ bool RDxfExporter::exportFile(const QString& fileName, const QString& nameFilter
     // Appid:
     if (!minimalistic) {
         //qDebug() << "writing appid...";
-        dw->tableAppid(1);
+        // CaveCAD: custom properties are exported as XDATA (see
+        // writeEntity), one application id per property title, so
+        // every title used anywhere in the document is registered
+        // here first.
+        QSet<QString> xdataAppids;
+        {
+            QSet<REntity::Id> ids = document->queryAllEntities(false, true);
+            QSet<REntity::Id>::iterator it;
+            for (it = ids.begin(); it != ids.end(); ++it) {
+                QSharedPointer<REntity> en = document->queryEntityDirect(*it);
+                if (en.isNull()) {
+                    continue;
+                }
+                QStringList titles = en->getCustomPropertyTitles();
+                for (int ti = 0; ti < titles.length(); ti++) {
+                    QString title = titles[ti];
+                    if (title.isEmpty() || title == "ACAD" || title == "QCAD") {
+                        continue;
+                    }
+                    xdataAppids.insert(title);
+                }
+            }
+        }
+        dw->tableAppid(2 + xdataAppids.size());
         dxf.writeAppid(*dw, "ACAD");
         dxf.writeAppid(*dw, "QCAD");
+        QSet<QString>::iterator ai;
+        for (ai = xdataAppids.begin(); ai != xdataAppids.end(); ++ai) {
+            dxf.writeAppid(*dw, (const char*)RDxfExporter::escapeUnicode(*ai));
+        }
         dw->tableEnd();
     }
 
@@ -752,6 +779,36 @@ void RDxfExporter::writeEntity(const REntity& e) {
 
     default:
         break;
+    }
+
+    // CaveCAD: persist the entity's custom properties as standard
+    // XDATA -- one 1001 block per property title, one 1000 string
+    // "key=value" per property. Stock QCAD's free DXF writer never
+    // implemented this, which silently discarded every custom
+    // property on save; the closed OpenDesign plugin drops them too.
+    writeCustomProperties(e);
+}
+
+/**
+ * Writes the given entity's custom properties as XDATA.
+ */
+void RDxfExporter::writeCustomProperties(const REntity& e) {
+    QMap<QString, QVariantMap> props = e.getCustomProperties();
+    QMap<QString, QVariantMap>::iterator it;
+    for (it = props.begin(); it != props.end(); ++it) {
+        QString title = it.key();
+        if (title.isEmpty() || title == "ACAD" || title == "QCAD") {
+            // "" carries importer-internal hints (e.g. "block");
+            // ACAD/QCAD groups are not ours to serialize
+            continue;
+        }
+        dw->dxfString(1001, (const char*)RDxfExporter::escapeUnicode(title));
+        QVariantMap& map = it.value();
+        QVariantMap::iterator pit;
+        for (pit = map.begin(); pit != map.end(); ++pit) {
+            QString record = pit.key() + "=" + pit.value().toString();
+            dw->dxfString(1000, (const char*)RDxfExporter::escapeUnicode(record));
+        }
     }
 }
 

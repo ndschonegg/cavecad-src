@@ -79,6 +79,7 @@ public:
 
     void writeEntity(RObject::Id id);
     void writeEntity(const REntity& e);
+    void writeCustomProperties(const REntity& e);
     void writePoint(const RPointEntity& p);
     void writeLine(const RLineEntity& l);
     void writeXLine(const RXLineEntity& l);
