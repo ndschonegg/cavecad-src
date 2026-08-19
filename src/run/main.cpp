@@ -137,9 +137,14 @@ int main(int argc, char *argv[]) {
 #endif
 
     // these are defaults:
+    // CaveCAD: QCAD Community rebranded as a dedicated cave mapping
+    // application. Its own application name gives it its own settings
+    // (CaveCAD3.ini) and its own per-user scripts folder, so it never
+    // collides with a QCAD / QCAD Professional install on the same
+    // machine.
     qApp->setOrganizationName("QCAD");
     qApp->setOrganizationDomain("QCAD.org");
-    qApp->setApplicationName("QCAD");
+    qApp->setApplicationName("CaveCAD");
     qApp->setApplicationVersion(RSettings::getVersionString());
 
     // alternative path for QCAD3.ini:
@@ -166,7 +171,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    RSettings::setApplicationNameOverride("QCAD3");
+    RSettings::setApplicationNameOverride("CaveCAD3");
 
     // Auto scale up user interface for high res displays under Windows:
 //#ifdef Q_OS_WIN

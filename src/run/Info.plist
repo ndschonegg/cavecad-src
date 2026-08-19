@@ -8,9 +8,9 @@
 	<string>APPL</string>
 
 	<key>CFBundleName</key>
-	<string>QCAD</string>
+	<string>CaveCAD</string>
 	<key>CFBundleDisplayName</key>
-	<string>QCAD</string>
+	<string>CaveCAD</string>
 	<key>CFBundleIdentifier</key>
 	<string>org.qcad.QCAD</string>
 	<key>CFBundleExecutable</key>
