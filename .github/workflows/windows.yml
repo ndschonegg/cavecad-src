@@ -24,7 +24,7 @@ jobs:
         shell: cmd
         run: |
           pip install aqtinstall
-          aqt install-qt windows desktop %QT_VERSION% %QT_ARCH% -m qtdeclarative qtsvg qttools -O %GITHUB_WORKSPACE%\Qt
+          aqt install-qt windows desktop %QT_VERSION% %QT_ARCH% -O %GITHUB_WORKSPACE%\Qt
 
       - name: Install Ninja
         shell: cmd
