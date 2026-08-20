@@ -1,0 +1,168 @@
+From 4cc0875a7b6a73bfe80f65107fecab29fa8026e7 Mon Sep 17 00:00:00 2001
+From: Nathan Schonegg <nschonegg@banning-eng.com>
+Date: Wed, 19 Aug 2026 21:46:41 -0400
+Subject: [PATCH] Build against the renamed CaveCAD tree and libraries
+
+The fork now lives at ../cavecad (symlink to cavecad-src) and its
+libraries are libcavecad*. Rename the plugin target to cavecadjsapi so
+the installed plugin matches the CaveCAD naming scheme.
+
+Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+---
+ CMakeLists.txt             | 86 +++++++++++++++++++-------------------
+ generator/CMakeInclude.txt |  4 +-
+ 2 files changed, 45 insertions(+), 45 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c45f39b..af6d66d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,8 +1,8 @@
+ cmake_minimum_required(VERSION 3.16)
+ 
+-include(../qcad/CMakeInclude.txt)
++include(../cavecad/CMakeInclude.txt)
+ 
+-project(qcadjsapi VERSION 1.0 LANGUAGES CXX)
++project(cavecadjsapi VERSION 1.0 LANGUAGES CXX)
+ 
+ set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+@@ -18,14 +18,14 @@ if(MSVC)
+ endif()
+ 
+ if(CMAKE_BUILD_TYPE STREQUAL "Release")
+-    link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../qcad/release)
+-    link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../qcad/plugins)
++    link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../cavecad/release)
++    link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../cavecad/plugins)
+ else()
+-    link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../qcad/debug)
+-    link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../qcad/plugins)
++    link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../cavecad/debug)
++    link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../cavecad/plugins)
+ endif()
+ 
+-qt_add_library(qcadjsapi SHARED
++qt_add_library(cavecadjsapi SHARED
+     generator/RJSHelper_qcad.h
+     generator/RJSHelper_qcad_manual.cpp
+     generator/RJSHelper_qcad_primitive.cpp
+@@ -80,48 +80,48 @@ qt_add_library(qcadjsapi SHARED
+ 
+ include(generator/CMakeInclude.txt)
+ 
+-target_include_directories(qcadjsapi PRIVATE
++target_include_directories(cavecadjsapi PRIVATE
+     ../qtjsapi
+     ../qtjsapi/generator
+     ../qtjsapi/generator/cpp
+-    ../qcad/src/3rdparty
+-    ../qcad/src/3rdparty/opennurbs
+-    ../qcad/src/3rdparty/spatialindexnavel
+-    ../qcad/src/3rdparty/stemmer/include
+-    ../qcad/src/3rdparty/dxflib/src
+-    ../qcad/src/core
+-    ../qcad/src/core/bridges
+-    ../qcad/src/core/math
+-    ../qcad/src/customwidgets
+-    ../qcad/src/entity
+-    ../qcad/src/grid
+-    ../qcad/src/gui
+-    ../qcad/src/io
+-    ../qcad/src/io/dxf
+-    ../qcad/src/operations
+-    ../qcad/src/run
+-    ../qcad/src/scripting
+-    ../qcad/src/scripting/jsapi
+-    ../qcad/src/scripts
+-    ../qcad/src/snap
+-    ../qcad/src/spatialindex
+-    ../qcad/src/stemmer
++    ../cavecad/src/3rdparty
++    ../cavecad/src/3rdparty/opennurbs
++    ../cavecad/src/3rdparty/spatialindexnavel
++    ../cavecad/src/3rdparty/stemmer/include
++    ../cavecad/src/3rdparty/dxflib/src
++    ../cavecad/src/core
++    ../cavecad/src/core/bridges
++    ../cavecad/src/core/math
++    ../cavecad/src/customwidgets
++    ../cavecad/src/entity
++    ../cavecad/src/grid
++    ../cavecad/src/gui
++    ../cavecad/src/io
++    ../cavecad/src/io/dxf
++    ../cavecad/src/operations
++    ../cavecad/src/run
++    ../cavecad/src/scripting
++    ../cavecad/src/scripting/jsapi
++    ../cavecad/src/scripts
++    ../cavecad/src/snap
++    ../cavecad/src/spatialindex
++    ../cavecad/src/stemmer
+     generator
+     generator/cpp
+     generator/adapters
+     .
+ )
+ 
+-set_target_properties(qcadjsapi PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../qcad/plugins)
+-set_target_properties(qcadjsapi PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../qcad/plugins)
+-set_target_properties(qcadjsapi PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../qcad/plugins)
++set_target_properties(cavecadjsapi PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../cavecad/plugins)
++set_target_properties(cavecadjsapi PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../cavecad/plugins)
++set_target_properties(cavecadjsapi PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../cavecad/plugins)
+ 
+-target_compile_definitions(qcadjsapi PRIVATE
++target_compile_definitions(cavecadjsapi PRIVATE
+     QCADJSAPI_LIBRARY
+     QCAD_DLL
+ )
+ 
+-target_link_libraries(qcadjsapi PRIVATE
++target_link_libraries(cavecadjsapi PRIVATE
+     Qt::Concurrent
+     Qt::Core
+     Qt::Gui
+@@ -136,14 +136,14 @@ target_link_libraries(qcadjsapi PRIVATE
+     Qt::PrintSupport
+     Qt::Core5Compat
+     Qt::QuickWidgets
+-    qcadcore
+-    qcadentity
+-    qcadgui
+-    qcadsnap
+-    qcadgrid
+-    qcadoperations
+-    qcadspatialindex
+-    qcadstemmer
++    cavecadcore
++    cavecadentity
++    cavecadgui
++    cavecadsnap
++    cavecadgrid
++    cavecadoperations
++    cavecadspatialindex
++    cavecadstemmer
+     qtjsapi
+     opennurbs
+ )
+diff --git a/generator/CMakeInclude.txt b/generator/CMakeInclude.txt
+index f5c5985..0d1b798 100644
+--- a/generator/CMakeInclude.txt
++++ b/generator/CMakeInclude.txt
+@@ -1,8 +1,8 @@
+ # Automatically generated, do not edit
+-target_precompile_headers(qcadjsapi PUBLIC
++target_precompile_headers(cavecadjsapi PUBLIC
+     generator/RJSHelper_qcad_headers.h
+ )
+-target_sources(qcadjsapi PUBLIC
++target_sources(cavecadjsapi PUBLIC
+     generator/cpp/raction_base.h
+     generator/cpp/raction_wrapper.h
+     generator/cpp/ractionadapter_base.h
+-- 
+2.54.0 (Apple Git-157)
+
