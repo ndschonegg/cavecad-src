@@ -6,7 +6,7 @@ on:
     branches: [cavecad]
 
 env:
-  QT_VERSION: 6.11.1
+  QT_VERSION: 6.10.3
   QT_ARCH: win64_msvc2022_64
   QTJSAPI_REV: c82731320fdc7b61dae56d4cf046bac9376bb2b4
   QCADJSAPI_REV: 2b2b0e86328416dc57ca57a035e10d5dfd919db6

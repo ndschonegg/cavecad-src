@@ -3114,8 +3114,10 @@ function applyTheme() {
     var systemId = RS.getSystemId();
     var theme = RSettings.getValue("Theme/ThemeName", undefined);
 
-    // only allow Modern theme on macOS:
-    if (!isNull(theme) && (systemId!=="osx" || theme==="Modern")) {
+    // CaveCAD: stylesheet themes work on macOS too. Upstream QCAD
+    // restricted macOS to the plugin-based "Modern" theme, which made
+    // Theme/ThemeName a silent no-op on Mac.
+    if (!isNull(theme)) {
         var path = "themes/" + theme + "/";
 
         qApp.styleSheet = "";

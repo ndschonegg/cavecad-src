@@ -37,7 +37,7 @@ cp "$SRC"/plugins/libcavecad*.dylib "$STAGE/Contents/PlugIns/"
 cp "$SRC"/plugins/designer/libcavecadcustomwidgets.dylib \
    "$STAGE/Contents/PlugIns/designer/"
 
-for d in scripts patterns linetypes fonts ts themes libraries; do
+for d in scripts patterns linetypes fonts ts themes libraries defaults; do
     ditto "$SRC/$d" "$STAGE/Contents/Resources/$d"
 done
 

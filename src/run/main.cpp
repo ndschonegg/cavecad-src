@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QLoggingCategory>
+#include <QFile>
 #include <QFileInfo>
 #include <QImageReader>
 #include <QSettings>
@@ -172,6 +173,48 @@ int main(int argc, char *argv[]) {
     }
 
     RSettings::setApplicationNameOverride("CaveCAD3");
+
+    // CaveCAD: on the very first start (no user configuration file yet),
+    // seed the user configuration from the factory defaults shipped with
+    // the application (defaults/CaveCAD3.ini). Existing configurations are
+    // never touched. Must run before the first RSettings read below, which
+    // instantiates the QSettings object.
+    {
+        QSettings tmpSettings(
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+            QSettings::IniFormat,
+#else
+            QSettings::NativeFormat,
+#endif
+            QSettings::UserScope,
+            qApp->organizationName(),
+            "CaveCAD3"
+        );
+        QFileInfo fiUserConfig(tmpSettings.fileName());
+        if (!fiUserConfig.exists()) {
+            // QApplication does not exist yet, so applicationDirPath()
+            // is unavailable; derive the application directory from
+            // argv[0] (relative paths resolve against the cwd):
+            QString appDir = QFileInfo(QString::fromLocal8Bit(argv[0])).absolutePath();
+            QStringList candidates;
+            candidates << appDir + "/defaults/CaveCAD3.ini";
+#ifdef Q_OS_MAC
+            candidates << appDir + "/../Resources/defaults/CaveCAD3.ini";
+#endif
+            candidates << cwd + QDir::separator() + "defaults/CaveCAD3.ini";
+            for (int i=0; i<candidates.length(); i++) {
+                QFileInfo fiDefaults(candidates[i]);
+                if (fiDefaults.exists()) {
+                    QDir().mkpath(fiUserConfig.absolutePath());
+                    if (QFile::copy(fiDefaults.absoluteFilePath(), fiUserConfig.absoluteFilePath())) {
+                        QFile::setPermissions(fiUserConfig.absoluteFilePath(),
+                            QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup | QFile::ReadOther);
+                    }
+                    break;
+                }
+            }
+        }
+    }
 
     // Auto scale up user interface for high res displays under Windows:
 //#ifdef Q_OS_WIN
