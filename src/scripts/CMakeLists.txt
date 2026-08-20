@@ -31,23 +31,27 @@ qt_standard_project_setup()
 # The extra, never-created output forces the command to run on every build;
 # update_qrc.sh only rewrites a .qrc when its content actually changed (via its
 # diff check), so rcc is only re-invoked when there is a real change.
-add_custom_command(
-    OUTPUT
-        ${CMAKE_CURRENT_SOURCE_DIR}/scripts.qrc
-        ${CMAKE_CURRENT_SOURCE_DIR}/scripts_release.qrc
-        ${CMAKE_CURRENT_BINARY_DIR}/update_qrc_always_run
-    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/update_qrc.sh
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "Updating scripts.qrc / scripts_release.qrc"
-    VERBATIM
-)
+# update_qrc.sh is a bash script and is not runnable on Windows. The .qrc files
+# it produces are committed, so on Windows we simply build against those.
+if(NOT WIN32)
+    add_custom_command(
+        OUTPUT
+            ${CMAKE_CURRENT_SOURCE_DIR}/scripts.qrc
+            ${CMAKE_CURRENT_SOURCE_DIR}/scripts_release.qrc
+            ${CMAKE_CURRENT_BINARY_DIR}/update_qrc_always_run
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/update_qrc.sh
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Updating scripts.qrc / scripts_release.qrc"
+        VERBATIM
+    )
 
-add_custom_target(cavecadscripts_qrc
-    DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/scripts.qrc
-        ${CMAKE_CURRENT_SOURCE_DIR}/scripts_release.qrc
-        ${CMAKE_CURRENT_BINARY_DIR}/update_qrc_always_run
-)
+    add_custom_target(cavecadscripts_qrc
+        DEPENDS
+            ${CMAKE_CURRENT_SOURCE_DIR}/scripts.qrc
+            ${CMAKE_CURRENT_SOURCE_DIR}/scripts_release.qrc
+            ${CMAKE_CURRENT_BINARY_DIR}/update_qrc_always_run
+    )
+endif()
 
 if(rtest)
     qt_add_resources(SOURCES scripts.qrc)
@@ -82,7 +86,9 @@ target_compile_definitions(cavecadscripts PRIVATE
 
 # Ensure the .qrc files are regenerated before this target's resources are
 # compiled (the rcc command also depends on the .qrc files directly).
-add_dependencies(cavecadscripts cavecadscripts_qrc)
+if(NOT WIN32)
+    add_dependencies(cavecadscripts cavecadscripts_qrc)
+endif()
 
 set_target_properties(cavecadscripts PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins)
 set_target_properties(cavecadscripts PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins)

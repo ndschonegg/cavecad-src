@@ -1,0 +1,69 @@
+name: Windows build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [cavecad]
+
+env:
+  QT_VERSION: 6.8.3
+  QT_ARCH: win64_msvc2022_64
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Qt ${{ env.QT_VERSION }}
+        shell: cmd
+        run: |
+          pip install aqtinstall
+          aqt install-qt windows desktop %QT_VERSION% %QT_ARCH% -m qtdeclarative qtsvg qttools -O %GITHUB_WORKSPACE%\Qt
+
+      - name: Install Ninja
+        shell: cmd
+        run: choco install ninja -y --no-progress
+
+      - name: Configure and build
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do set VSPATH=%%i
+          call "%VSPATH%\VC\Auxiliary\Build\vcvars64.bat"
+          set QTDIR=%GITHUB_WORKSPACE%\Qt\%QT_VERSION%\msvc2022_64
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_QT6=ON -DCMAKE_PREFIX_PATH=%QTDIR%
+          if errorlevel 1 exit /b 1
+          cmake --build build
+          if errorlevel 1 exit /b 1
+
+      - name: Deploy Qt runtime and data files
+        if: success()
+        shell: cmd
+        run: |
+          set QTDIR=%GITHUB_WORKSPACE%\Qt\%QT_VERSION%\msvc2022_64
+          "%QTDIR%\bin\windeployqt.exe" --release --qmldir scripts release\cavecad.exe
+          for %%d in (scripts libraries patterns linetypes fonts themes ts plugins defaults) do (
+            if exist %%d xcopy /E /I /Y /Q %%d release\%%d >nul
+          )
+
+      - name: Upload build
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cavecad-windows-x64
+          path: release/
+
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            build/CMakeFiles/CMakeConfigureLog.yaml
+            build/CMakeCache.txt
+          if-no-files-found: ignore
