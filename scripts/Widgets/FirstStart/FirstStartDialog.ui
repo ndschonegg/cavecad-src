@@ -63,7 +63,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../qcad_icon.png</normaloff>../../qcad_icon.png</iconset>
+           <normaloff>../../cavecad_icon.png</normaloff>../../cavecad_icon.png</iconset>
          </property>
          <property name="iconSize">
           <size>

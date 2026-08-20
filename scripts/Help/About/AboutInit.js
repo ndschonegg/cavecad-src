@@ -3,7 +3,7 @@ function init(basePath) {
     action.menuRole = QAction.AboutRole;
     action.setRequiresDocument(false);
     action.setScriptFile(basePath + "/About.js");
-    action.setIcon(basePath + "/../../qcad_icon.png");
+    action.setIcon(basePath + "/../../cavecad_icon.png");
     action.setNoState();
     action.setGroupSortOrder(110990);
     action.setSortOrder(100);

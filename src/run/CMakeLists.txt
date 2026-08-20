@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 
 if (APPLE)
-    project(QCAD)
+    project(CaveCAD)
 else()
-    project(qcad)
+    project(cavecad)
 endif()
 
 include(../../CMakeInclude.txt)

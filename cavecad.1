@@ -1,17 +1,17 @@
-.TH QCad 1 "November 2015" 3.12 QCad3
+.TH CaveCAD 1 "November 2015" 3.12 CaveCAD3
 .SH NAME
-qcad \- A feature-rich drafting application
+cavecad \- A feature-rich drafting application
 .SH SYNOPSIS
-\fBqcad\fR [ \fIoptions\fR ] [ \fIfiles\fR ]
+\fBcavecad\fR [ \fIoptions\fR ] [ \fIfiles\fR ]
 .SH DESCRIPTION
-\fIQCAD\fR is a free, open source application for \fIComputer Aided Drafting\fR
-(CAD) in two dimensions (2D). With QCAD you can create, study and alter
+\fICaveCAD\fR is a free, open source application for \fIComputer Aided Drafting\fR
+(CAD) in two dimensions (2D). With CaveCAD you can create, study and alter
 technical drawings such as plans for buildings, interiors, mechanical parts or
-schematics and diagrams.  QCAD builds upon the \fIDrawing Interchange File
+schematics and diagrams.  CaveCAD builds upon the \fIDrawing Interchange File
 Format\fR. Such DXF-files are used by many other professional CAD-systems.
 .PP
-QCAD works on Windows, Mac OS X and Linux. The source
-code of QCAD is released under the GPL version 3 (GPLv3), a popular Open Source
+CaveCAD works on Windows, Mac OS X and Linux. The source
+code of CaveCAD is released under the GPL version 3 (GPLv3), a popular Open Source
 license.
 .SH OPTIONS
 .TP
@@ -22,12 +22,12 @@ Displays this help.
 Displays the application version.
 .TP
 \-config \fIpath\fR
-Reads and stores settings to QCAD3.ini at the given location instead of the
+Reads and stores settings to CaveCAD3.ini at the given location instead of the
 default location.
 .TP
 \-locale \fIlocale\fR
 Sets the locale to be used (overrides the language set in the preferences).
-E.g. '-locale de' starts QCAD in German.
+E.g. '-locale de' starts CaveCAD in German.
 .TP
 \-filter \fIfilter\fR
 Opens the subsequent file(s) with the explicitly given import filter.
@@ -44,22 +44,22 @@ Rescan scripts folder for new add-ons
 .TP
 \-always-load-scripts
 Forces reloading of scripts when they are used.  This is mainly useful during
-script development, to apply changes without restarting QCAD.
+script development, to apply changes without restarting CaveCAD.
 .TP
 \-enable-script-debugger
 Enables the script debugger.  NOT recommended as this may cause unexpected
-behavior when using QCAD.
+behavior when using CaveCAD.
 .TP
 \-debug-action-order
 Print action order information in menus
 .TP
 \-autostart \fIscript-file\fR
 Starts the given script file instead of the default scripts/autostart.js. Note
-that with this option, QCAD is not started but rather the application
+that with this option, CaveCAD is not started but rather the application
 implemented in the given script.
 .TP
 \-exec \fIscript-file\fR [ \fIoptions\fR ]
-Executes the given script file directly after starting QCAD. Options after the
+Executes the given script file directly after starting CaveCAD. Options after the
 script file are passed on to the script.
 .TP
 \-gui-css-file \fICSS-file\fR
@@ -75,6 +75,6 @@ Use but don't display GUI.
 Enables XData (custom properties) support.
 .TP
 \-quit
-Quits QCAD, for example after executing the given script(s).
+Quits CaveCAD, for example after executing the given script(s).
 .SH COPYRIGHT
 Copyright (c) Andrew Mustun and others.

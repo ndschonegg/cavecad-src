@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=QCAD
-StartupWMClass=QCAD
+Name=CaveCAD
+StartupWMClass=CaveCAD
 GenericName=CAD Software
 GenericName[da]=Computerhjulpet design (CAD)
 GenericName[de]=System für computerunterstütztes Zeichnen (CAD)
@@ -49,9 +49,9 @@ Comment[sv]=2D CAD-system
 Comment[sl]=Sistem 2D CAD
 Comment[uk]=2D САПР
 Comment[tr]=2D CAD Sistemi
-Exec=qcad %F
+Exec=cavecad %F
 X-MultipleArgs=true
-Icon=org.qcad.QCAD
+Icon=org.cavecad.CaveCAD
 Terminal=false
 Type=Application
 Categories=Graphics;VectorGraphics;Engineering;Construction;2DGraphics;Science;

@@ -5,14 +5,14 @@ SUBDIRS = \
     src
 
 win32 {
-    dirs = $$system("dir /B ..\* | findstr qcad..*")
+    dirs = $$system("dir /B ..\* | findstr "qcad..* cavecad..*"")
     for (dir, $$list($$dirs)) {
         message(..\\$$dir)
         SUBDIRS += ..\\$$dir
     }
 }
 else {
-    SUBDIRS += $$system("ls -d ../qcad?* 2>/dev/null | grep -v $(basename $(pwd))$")
+    SUBDIRS += $$system("ls -d ../qcad?* ../cavecad?* 2>/dev/null | grep -v $(basename $(pwd))$")
 }
 
 !r_mobile {

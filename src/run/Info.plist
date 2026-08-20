@@ -12,9 +12,9 @@
 	<key>CFBundleDisplayName</key>
 	<string>CaveCAD</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.qcad.QCAD</string>
+	<string>org.cavecad.CaveCAD</string>
 	<key>CFBundleExecutable</key>
-	<string>QCAD</string>
+	<string>CaveCAD</string>
 
 	<key>CFBundleVersion</key>
 	<string></string>

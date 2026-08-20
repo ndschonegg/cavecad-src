@@ -1,7 +1,7 @@
 include( ../../shared_app.pri )
 
 macx {
-    ICON = $$PWD/qcad.icns
+    ICON = $$PWD/cavecad.icns
 }
 
 win32 {
@@ -9,7 +9,7 @@ win32 {
         RC_FILE = $$r_iconrc
     }
     else {
-        RC_FILE = $$PWD/qcad.rc
+        RC_FILE = $$PWD/cavecad.rc
     }
 }
 
@@ -38,7 +38,7 @@ win32 {
 }
 
 macx {
-    TARGET = QCAD
+    TARGET = CaveCAD
 } 
 else {
     unix {

@@ -284,7 +284,7 @@ NewFile.createMdiChild = function(fileName, nameFilter, uiFile, graphicsSceneCla
     }
 
     var mdiChild = new RMdiChildQt();
-    mdiChild.windowIcon = new QIcon(autoPath("scripts/qcad_icon.png"));
+    mdiChild.windowIcon = new QIcon(autoPath("scripts/cavecad_icon.png"));
     mdiChild.setDocumentInterface(di);
     var flags = makeQtWindowFlags(Qt.FramelessWindowHint);
     mdiChild.setWindowFlags(flags);

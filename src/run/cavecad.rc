@@ -1,0 +1,10 @@
+#ifndef CAVECAD_RC
+#define CAVECAD_RC
+
+IDI_ICON1               ICON    DISCARDABLE     "cavecad.ico"
+IDI_ICON2               ICON    DISCARDABLE     "cavecaddoc.ico"
+
+#define VER_ORIGINALFILENAME_STR    "cavecad.exe"
+#include "../../shared.rc"
+
+#endif // CAVECAD_RC

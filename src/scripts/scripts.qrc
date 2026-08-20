@@ -2726,8 +2726,8 @@
     <file alias="scripts/map.js">../../scripts/map.js</file>
     <file alias="scripts/mimetype.png">../../scripts/mimetype.png</file>
     <file alias="scripts/org.qcad.QCAD.png">../../scripts/org.qcad.QCAD.png</file>
-    <file alias="scripts/qcad_icon.png">../../scripts/qcad_icon.png</file>
-    <file alias="scripts/qcad_icon.svg">../../scripts/qcad_icon.svg</file>
+    <file alias="scripts/cavecad_icon.png">../../scripts/cavecad_icon.png</file>
+    <file alias="scripts/cavecad_icon.svg">../../scripts/cavecad_icon.svg</file>
     <file alias="scripts/simple.js">../../scripts/simple.js</file>
     <file alias="scripts/simple_create.js">../../scripts/simple_create.js</file>
     <file alias="scripts/simple_info.js">../../scripts/simple_info.js</file>
