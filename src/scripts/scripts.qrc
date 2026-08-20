@@ -2715,6 +2715,8 @@
     <file alias="scripts/Window/PreviousWindow/PreviousWindowInit.js">../../scripts/Window/PreviousWindow/PreviousWindowInit.js</file>
     <file alias="scripts/Window/Window.js">../../scripts/Window/Window.js</file>
     <file alias="scripts/autostart.js">../../scripts/autostart.js</file>
+    <file alias="scripts/cavecad_icon.png">../../scripts/cavecad_icon.png</file>
+    <file alias="scripts/cavecad_icon.svg">../../scripts/cavecad_icon.svg</file>
     <file alias="scripts/date.js">../../scripts/date.js</file>
     <file alias="scripts/input.js">../../scripts/input.js</file>
     <file alias="scripts/lib/date.format.js">../../scripts/lib/date.format.js</file>
@@ -2725,9 +2727,7 @@
     <file alias="scripts/library.js">../../scripts/library.js</file>
     <file alias="scripts/map.js">../../scripts/map.js</file>
     <file alias="scripts/mimetype.png">../../scripts/mimetype.png</file>
-    <file alias="scripts/org.qcad.QCAD.png">../../scripts/org.qcad.QCAD.png</file>
-    <file alias="scripts/cavecad_icon.png">../../scripts/cavecad_icon.png</file>
-    <file alias="scripts/cavecad_icon.svg">../../scripts/cavecad_icon.svg</file>
+    <file alias="scripts/org.cavecad.CaveCAD.png">../../scripts/org.cavecad.CaveCAD.png</file>
     <file alias="scripts/simple.js">../../scripts/simple.js</file>
     <file alias="scripts/simple_create.js">../../scripts/simple_create.js</file>
     <file alias="scripts/simple_info.js">../../scripts/simple_info.js</file>
