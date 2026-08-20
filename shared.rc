@@ -19,7 +19,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #define VER_LEGALTRADEMARKS2_STR    VER_LEGALTRADEMARKS1_STR
 #define VER_PRODUCTNAME_STR         "CaveCAD"
 
-#define VER_COMPANYDOMAIN_STR       "https://github.com/ndschonegg/qcad"
+#define VER_COMPANYDOMAIN_STR       "https://github.com/ndschonegg/cavecad-src"
 
 VS_VERSION_INFO VERSIONINFO
 FILEVERSION VER_FILEVERSION
