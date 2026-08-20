@@ -1,7 +1,7 @@
 #ifndef SPATIALINDEX_RC
 #define SPATIALINDEX_RC
 
-#define VER_ORIGINALFILENAME_STR    "qcadspatialindex.dll"
+#define VER_ORIGINALFILENAME_STR    "cavecadspatialindex.dll"
 #include "../../shared.rc"
 
 #endif // SPATIALINDEX_RC

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 include(../../CMakeInclude.txt)
 
-project(qcadsnap VERSION 1.0 LANGUAGES CXX)
+project(cavecadsnap VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,7 +20,7 @@ else()
     link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
 endif()
 
-add_library(qcadsnap SHARED
+add_library(cavecadsnap SHARED
     RRestrictAngleLength.cpp RRestrictAngleLength.h
     RRestrictHorizontal.cpp RRestrictHorizontal.h
     RRestrictOff.cpp RRestrictOff.h
@@ -43,7 +43,7 @@ add_library(qcadsnap SHARED
     ${RC}
 )
 
-target_include_directories(qcadsnap PUBLIC
+target_include_directories(cavecadsnap PUBLIC
     ../../src/3rdparty
     ../../src/core
     ../../src/core/math
@@ -52,22 +52,22 @@ target_include_directories(qcadsnap PUBLIC
     ../../src/grid
 )
 
-target_compile_definitions(qcadsnap PRIVATE
+target_compile_definitions(cavecadsnap PRIVATE
     QCADSNAP_LIBRARY
     QCAD_DLL
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    set_target_properties(qcadsnap PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
-    set_target_properties(qcadsnap PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
-    set_target_properties(qcadsnap PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadsnap PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadsnap PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadsnap PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
 else()
-    set_target_properties(qcadsnap PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
-    set_target_properties(qcadsnap PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
-    set_target_properties(qcadsnap PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadsnap PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadsnap PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadsnap PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
 endif()
 
-target_link_libraries(qcadsnap PUBLIC
+target_link_libraries(cavecadsnap PUBLIC
     Qt::Core
     Qt::Gui
     Qt::Widgets
@@ -76,8 +76,8 @@ target_link_libraries(qcadsnap PUBLIC
     Qt::Sql
     Qt::Svg
     Qt::Xml
-    qcadcore
-    qcadentity
-    qcadgrid
+    cavecadcore
+    cavecadentity
+    cavecadgrid
 )
 

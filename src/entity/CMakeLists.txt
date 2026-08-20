@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 include(../../CMakeInclude.txt)
 
-project(qcadentity VERSION 1.0 LANGUAGES CXX)
+project(cavecadentity VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,7 +20,7 @@ else()
     link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
 endif()
 
-add_library(qcadentity SHARED
+add_library(cavecadentity SHARED
     RArcData.cpp RArcData.h
     RArcEntity.cpp RArcEntity.h
     RAttributeData.cpp RAttributeData.h
@@ -88,29 +88,29 @@ add_library(qcadentity SHARED
     ${RC}
 )
 
-target_include_directories(qcadentity PUBLIC
+target_include_directories(cavecadentity PUBLIC
     ../../src/3rdparty
     ../../src/core
     ../../src/core/math
     ../../src/entity
 )
 
-target_compile_definitions(qcadentity PRIVATE
+target_compile_definitions(cavecadentity PRIVATE
     QCADENTITY_LIBRARY
     QCAD_DLL
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    set_target_properties(qcadentity PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
-    set_target_properties(qcadentity PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
-    set_target_properties(qcadentity PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadentity PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadentity PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadentity PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
 else()
-    set_target_properties(qcadentity PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
-    set_target_properties(qcadentity PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
-    set_target_properties(qcadentity PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadentity PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadentity PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadentity PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
 endif()
 
-target_link_libraries(qcadentity PUBLIC
+target_link_libraries(cavecadentity PUBLIC
     Qt::Core
     Qt::Gui
     Qt::Widgets
@@ -120,12 +120,12 @@ target_link_libraries(qcadentity PUBLIC
     Qt::Sql
     Qt::Svg
     Qt::Xml
-    qcadcore
+    cavecadcore
     opennurbs
 )
 
 if(win32-msvc2010)
-    target_compile_definitions(qcadentity PRIVATE
+    target_compile_definitions(cavecadentity PRIVATE
         _CRT_SECURE_NO_WARNINGS
     )
 endif()

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(qcaddxf VERSION 1.0 LANGUAGES CXX)
+project(cavecaddxf VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -17,7 +17,7 @@ else()
     link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../debug)
 endif()
 
-add_library(qcaddxf SHARED
+add_library(cavecaddxf SHARED
     RDxfExporter.cpp RDxfExporter.h
     RDxfExporterFactory.cpp RDxfExporterFactory.h
     RDxfImporter.cpp RDxfImporter.h
@@ -26,7 +26,7 @@ add_library(qcaddxf SHARED
     ${RC}
 )
 
-target_include_directories(qcaddxf PRIVATE
+target_include_directories(cavecaddxf PRIVATE
     ../../../src/3rdparty
     ../../../src/core
     ../../../src/entity
@@ -35,16 +35,16 @@ target_include_directories(qcaddxf PRIVATE
     ../../../src/io/dxf
 )
 
-target_compile_definitions(qcaddxf PRIVATE
+target_compile_definitions(cavecaddxf PRIVATE
     QCADDXF_LIBRARY
     QCAD_DLL
 )
 
-set_target_properties(qcaddxf PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../plugins)
-set_target_properties(qcaddxf PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../plugins)
-set_target_properties(qcaddxf PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../plugins)
+set_target_properties(cavecaddxf PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../plugins)
+set_target_properties(cavecaddxf PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../plugins)
+set_target_properties(cavecaddxf PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../plugins)
 
-target_link_libraries(qcaddxf PRIVATE
+target_link_libraries(cavecaddxf PRIVATE
     Qt::Core
     Qt::Gui
     Qt::Widgets
@@ -53,9 +53,9 @@ target_link_libraries(qcaddxf PRIVATE
     Qt::Sql
     Qt::Svg
     Qt::Xml
-    qcadcore
-    qcadentity
-    qcadoperations
+    cavecadcore
+    cavecadentity
+    cavecadoperations
     dxflib
 )
 

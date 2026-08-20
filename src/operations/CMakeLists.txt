@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 include(../../CMakeInclude.txt)
 
-project(qcadoperations VERSION 1.0 LANGUAGES CXX)
+project(cavecadoperations VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,7 +20,7 @@ else()
     link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
 endif()
 
-add_library(qcadoperations SHARED
+add_library(cavecadoperations SHARED
     RAddObjectOperation.cpp RAddObjectOperation.h
     RAddObjectsOperation.cpp RAddObjectsOperation.h
     RChangePropertyOperation.cpp RChangePropertyOperation.h
@@ -44,7 +44,7 @@ add_library(qcadoperations SHARED
     RTranslation.h
     ${RC}
 )
-target_include_directories(qcadoperations PUBLIC
+target_include_directories(cavecadoperations PUBLIC
     ../../src/3rdparty
     ../../src/core
     ../../src/core/math
@@ -54,22 +54,22 @@ target_include_directories(qcadoperations PUBLIC
     ../../src/operations
 )
 
-target_compile_definitions(qcadoperations PRIVATE
+target_compile_definitions(cavecadoperations PRIVATE
     QCADOPERATIONS_LIBRARY
     QCAD_DLL
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    set_target_properties(qcadoperations PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
-    set_target_properties(qcadoperations PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
-    set_target_properties(qcadoperations PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadoperations PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadoperations PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadoperations PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
 else()
-    set_target_properties(qcadoperations PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
-    set_target_properties(qcadoperations PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
-    set_target_properties(qcadoperations PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadoperations PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadoperations PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadoperations PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
 endif()
 
-target_link_libraries(qcadoperations PUBLIC
+target_link_libraries(cavecadoperations PUBLIC
     # Remove: L${CMAKE_CURRENT_SOURCE_DIR}/
     Qt::Core
     Qt::Gui
@@ -79,7 +79,7 @@ target_link_libraries(qcadoperations PUBLIC
     Qt::Sql
     Qt::Svg
     Qt::Xml
-    qcadcore
-    qcadentity
+    cavecadcore
+    cavecadentity
 )
 

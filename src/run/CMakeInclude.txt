@@ -51,7 +51,7 @@ else()
 endif()
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-    set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME qcad-bin)
+    set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME cavecad-bin)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -65,14 +65,14 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::Xml
     Qt::Qml
     Qt::PrintSupport
-    qcadcore
-    qcadentity
-    qcadgui
-    qcadgrid
-    qcadgui
-    qcadoperations
-    qcadsnap
-    qcadspatialindex
+    cavecadcore
+    cavecadentity
+    cavecadgui
+    cavecadgrid
+    cavecadgui
+    cavecadoperations
+    cavecadsnap
+    cavecadspatialindex
     spatialindexnavel
     stemmer
 )

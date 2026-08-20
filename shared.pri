@@ -158,7 +158,7 @@ else {
     RLIBNAME = $$r_libname
 }
 else {
-    RLIBNAME = "qcad"
+    RLIBNAME = "cavecad"
 }
 
 TARGET = $$join(TARGET,,$$RLIBNAME,)

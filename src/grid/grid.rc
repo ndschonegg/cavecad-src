@@ -1,7 +1,7 @@
 #ifndef GRID_RC
 #define GRID_RC
 
-#define VER_ORIGINALFILENAME_STR    "qcadgrid.dll"
+#define VER_ORIGINALFILENAME_STR    "cavecadgrid.dll"
 #include "../../shared.rc"
 
 #endif // GRID_RC

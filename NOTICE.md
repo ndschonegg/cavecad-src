@@ -22,6 +22,13 @@ Summary of modifications (August 2026 onward)
 - Repackaged script resource lists to match the CaveCAD script set
   (src/scripts/scripts.qrc, src/scripts/scripts_release.qrc).
 - Documentation updated for CaveCAD (README.md, readme.txt, this file).
+- Completed the rename of QCAD-named build artifacts and files: application
+  bundle and executable (CaveCAD.app/CaveCAD), bundle identifier
+  (org.cavecad.CaveCAD), shared libraries and plugins (libqcad* to
+  libcavecad*), translation files (ts/qcad* to ts/cavecad*), icons,
+  Windows version resources, desktop entry, man page, and Doxygen project.
+  Internal QCAD API names (R-prefixed classes, R_QCAD_VERSION_* macros,
+  QCAD_DLL) and GPL attribution headers are unchanged.
 
 What is NOT included
 --------------------

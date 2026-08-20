@@ -1,7 +1,7 @@
 #ifndef GUI_RC
 #define GUI_RC
 
-#define VER_ORIGINALFILENAME_STR    "qcadgui.dll"
+#define VER_ORIGINALFILENAME_STR    "cavecadgui.dll"
 #include "../../shared.rc"
 
 #endif // GUI_RC

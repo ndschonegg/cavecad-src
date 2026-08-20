@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 include(../../CMakeInclude.txt)
 
-project(qcadscripts VERSION 1.0 LANGUAGES CXX)
+project(cavecadscripts VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -17,15 +17,15 @@ qt_standard_project_setup()
 # only rewrites a .qrc when its content actually changed (via its diff check),
 # so rcc is only re-invoked when there is a real change.
 # Regenerate the .qrc files at build time, wrapped in a dedicated custom target
-# (qcadscripts_qrc) rather than attached to the qcadscripts library target.
+# (cavecadscripts_qrc) rather than attached to the cavecadscripts library target.
 #
 # This decoupling is what avoids a dependency cycle. qt_add_resources() below
 # registers each .qrc as a configure-time dependency (CMAKE_LIST_FILES), and
-# cmake_autogen records all of those in its depfile, so qcadscripts_autogen ends
+# cmake_autogen records all of those in its depfile, so cavecadscripts_autogen ends
 # up depending on scripts_release.qrc. If the command that *produces* the .qrc
-# were attached to qcadscripts, CMake would also give it an order-only dependency
-# on qcadscripts_autogen, closing the loop:
-#   scripts_release.qrc -> qcadscripts_autogen -> .../timestamp -> scripts_release.qrc
+# were attached to cavecadscripts, CMake would also give it an order-only dependency
+# on cavecadscripts_autogen, closing the loop:
+#   scripts_release.qrc -> cavecadscripts_autogen -> .../timestamp -> scripts_release.qrc
 # Owning the producer with a separate target (no AUTOGEN) breaks the forward edge.
 #
 # The extra, never-created output forces the command to run on every build;
@@ -42,7 +42,7 @@ add_custom_command(
     VERBATIM
 )
 
-add_custom_target(qcadscripts_qrc
+add_custom_target(cavecadscripts_qrc
     DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/scripts.qrc
         ${CMAKE_CURRENT_SOURCE_DIR}/scripts_release.qrc
@@ -65,30 +65,30 @@ else()
     link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
 endif()
 
-add_library(qcadscripts SHARED
+add_library(cavecadscripts SHARED
     RScriptsPlugin.cpp RScriptsPlugin.h
     ${SOURCES}
     ${RC}
 )
 
-target_include_directories(qcadscripts PRIVATE
+target_include_directories(cavecadscripts PRIVATE
     ../../src/core
     ../../src/core/math
 )
 
-target_compile_definitions(qcadscripts PRIVATE
+target_compile_definitions(cavecadscripts PRIVATE
     QCAD_DLL
 )
 
 # Ensure the .qrc files are regenerated before this target's resources are
 # compiled (the rcc command also depends on the .qrc files directly).
-add_dependencies(qcadscripts qcadscripts_qrc)
+add_dependencies(cavecadscripts cavecadscripts_qrc)
 
-set_target_properties(qcadscripts PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins)
-set_target_properties(qcadscripts PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins)
-set_target_properties(qcadscripts PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins)
+set_target_properties(cavecadscripts PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins)
+set_target_properties(cavecadscripts PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins)
+set_target_properties(cavecadscripts PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins)
 
-target_link_libraries(qcadscripts PRIVATE
+target_link_libraries(cavecadscripts PRIVATE
     Qt::Core
     Qt::Gui
     Qt::Widgets
@@ -97,7 +97,7 @@ target_link_libraries(qcadscripts PRIVATE
     Qt::Sql
     Qt::Svg
     Qt::Xml
-    qcadcore
+    cavecadcore
 )
 
 

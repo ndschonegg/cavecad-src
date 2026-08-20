@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 include(../../CMakeInclude.txt)
 
-project(qcadcustomwidgets VERSION 1.0 LANGUAGES CXX)
+project(cavecadcustomwidgets VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,7 +20,7 @@ else()
     link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
 endif()
 
-add_library(qcadcustomwidgets SHARED
+add_library(cavecadcustomwidgets SHARED
     RCharacterWidgetPlugin.cpp RCharacterWidgetPlugin.h
     RColorComboPlugin.cpp RColorComboPlugin.h
     RComboBoxPlugin.cpp RComboBoxPlugin.h
@@ -39,21 +39,21 @@ add_library(qcadcustomwidgets SHARED
     RTextEditPlugin.cpp RTextEditPlugin.h
     ${RC}
 )
-target_include_directories(qcadcustomwidgets PRIVATE
+target_include_directories(cavecadcustomwidgets PRIVATE
     ../../src/core
     ../../src/core/math
     ../../src/entity
     ../../src/gui
 )
 
-target_compile_definitions(qcadcustomwidgets PRIVATE
+target_compile_definitions(cavecadcustomwidgets PRIVATE
     QCAD_DLL
 )
 
-set_target_properties(qcadcustomwidgets PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins/designer)
-set_target_properties(qcadcustomwidgets PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins/designer)
+set_target_properties(cavecadcustomwidgets PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins/designer)
+set_target_properties(cavecadcustomwidgets PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins/designer)
 
-target_link_libraries(qcadcustomwidgets PRIVATE
+target_link_libraries(cavecadcustomwidgets PRIVATE
     # Remove: L${CMAKE_CURRENT_SOURCE_DIR}/
     Qt::Core
     Qt::Gui
@@ -63,6 +63,6 @@ target_link_libraries(qcadcustomwidgets PRIVATE
     Qt::Sql
     Qt::Svg
     Qt::Xml
-    qcadcore
-    qcadgui
+    cavecadcore
+    cavecadgui
 )

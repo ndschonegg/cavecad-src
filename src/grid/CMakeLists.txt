@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 include(../../CMakeInclude.txt)
 
-project(qcadgrid VERSION 1.0 LANGUAGES CXX)
+project(cavecadgrid VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,34 +20,34 @@ else()
     link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
 endif()
 
-add_library(qcadgrid SHARED
+add_library(cavecadgrid SHARED
     ROrthoGrid.cpp ROrthoGrid.h
     ${RC}
 )
 
-target_include_directories(qcadgrid PUBLIC
+target_include_directories(cavecadgrid PUBLIC
     ../../src/core
     ../../src/core/math
     ../../src/entity
     ../../src/gui
 )
 
-target_compile_definitions(qcadgrid PRIVATE
+target_compile_definitions(cavecadgrid PRIVATE
     QCADGRID_LIBRARY
     QCAD_DLL
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    set_target_properties(qcadgrid PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
-    set_target_properties(qcadgrid PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
-    set_target_properties(qcadgrid PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadgrid PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadgrid PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadgrid PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
 else()
-    set_target_properties(qcadgrid PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
-    set_target_properties(qcadgrid PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
-    set_target_properties(qcadgrid PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadgrid PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadgrid PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadgrid PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
 endif()
 
-target_link_libraries(qcadgrid PUBLIC
+target_link_libraries(cavecadgrid PUBLIC
     # Remove: L${CMAKE_CURRENT_SOURCE_DIR}/
     Qt::Core
     Qt::Gui
@@ -57,11 +57,11 @@ target_link_libraries(qcadgrid PUBLIC
     Qt::Sql
     Qt::Svg
     Qt::Xml
-    qcadcore
+    cavecadcore
 )
 
 if(win32-msvc2010)
-    target_compile_definitions(qcadgrid PRIVATE
+    target_compile_definitions(cavecadgrid PRIVATE
         _CRT_SECURE_NO_WARNINGS
     )
 endif()

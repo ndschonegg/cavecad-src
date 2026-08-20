@@ -57,10 +57,10 @@ endif()
 # (full version, no 30 day limit, not activated).
 # This block runs once per build tree (CMakeInclude.txt is also included by
 # subdirectories so that they can be configured standalone).
-if(NOT TARGET qcad_edition)
+if(NOT TARGET cavecad_edition)
     # Carrier target for edition-wide compile definitions.
     # Targets that contain edition-specific code link against this:
-    add_library(qcad_edition INTERFACE)
+    add_library(cavecad_edition INTERFACE)
 
     foreach(EDITION_FLAG rtrial rtrial30 ractivated)
         if(DEFINED CACHE{${EDITION_FLAG}} AND ${EDITION_FLAG})
@@ -74,18 +74,18 @@ if(NOT TARGET qcad_edition)
 
     if(rtrial)
         message(STATUS "Building QCAD trial edition (RTRIAL)")
-        target_compile_definitions(qcad_edition INTERFACE RTRIAL)
+        target_compile_definitions(cavecad_edition INTERFACE RTRIAL)
     else()
         message(STATUS "Building QCAD full edition")
     endif()
 
     if(rtrial30)
         message(STATUS "Trial limited to 30 days (RTRIAL30)")
-        target_compile_definitions(qcad_edition INTERFACE RTRIAL30)
+        target_compile_definitions(cavecad_edition INTERFACE RTRIAL30)
     endif()
 
     if(ractivated)
         message(STATUS "Compile Activated (RACTIVATED)")
-        target_compile_definitions(qcad_edition INTERFACE RACTIVATED)
+        target_compile_definitions(cavecad_edition INTERFACE RACTIVATED)
     endif()
 endif()

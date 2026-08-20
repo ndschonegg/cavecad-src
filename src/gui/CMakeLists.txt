@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 include(../../CMakeInclude.txt)
 
-project(qcadgui VERSION 1.0 LANGUAGES CXX)
+project(cavecadgui VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,7 +20,7 @@ else()
     link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
 endif()
 
-add_library(qcadgui SHARED
+add_library(cavecadgui SHARED
     RCharacterWidget.cpp RCharacterWidget.h
     RCadToolBar.cpp RCadToolBar.h
     RCadToolBarPanel.cpp RCadToolBarPanel.h
@@ -62,7 +62,7 @@ add_library(qcadgui SHARED
     ${RC}
 )
 
-target_include_directories(qcadgui PUBLIC
+target_include_directories(cavecadgui PUBLIC
     ../../src/3rdparty
     ../../src/core
     ../../src/core/math
@@ -70,22 +70,22 @@ target_include_directories(qcadgui PUBLIC
     ../../src/gui
 )
 
-target_compile_definitions(qcadgui PRIVATE
+target_compile_definitions(cavecadgui PRIVATE
     QCADGUI_LIBRARY
     QCAD_DLL
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    set_target_properties(qcadgui PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
-    set_target_properties(qcadgui PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
-    set_target_properties(qcadgui PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadgui PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadgui PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
+    set_target_properties(cavecadgui PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../release)
 else()
-    set_target_properties(qcadgui PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
-    set_target_properties(qcadgui PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
-    set_target_properties(qcadgui PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadgui PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadgui PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
+    set_target_properties(cavecadgui PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../debug)
 endif()
 
-target_link_libraries(qcadgui PUBLIC
+target_link_libraries(cavecadgui PUBLIC
     Qt::Concurrent
     Qt::Core
     Qt::Gui
@@ -95,6 +95,6 @@ target_link_libraries(qcadgui PUBLIC
     Qt::Sql
     Qt::Svg
     Qt::Xml
-    qcadcore
-    qcadentity
+    cavecadcore
+    cavecadentity
 )

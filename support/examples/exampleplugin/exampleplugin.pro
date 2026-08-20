@@ -6,5 +6,5 @@ TEMPLATE    = lib
 HEADERS     = RExamplePlugin.h
 SOURCES     = RExamplePlugin.cpp
 DESTDIR     = $$PWD/../../../plugins
-LIBS += -lqcadcore -lqcadgui -lqcadecmaapi
+LIBS += -lcavecadcore -lcavecadgui -lcavecadecmaapi
 RESOURCES   = scripts.qrc

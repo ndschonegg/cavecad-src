@@ -5,7 +5,7 @@ SUBDIRS = \
     src
 
 win32 {
-    dirs = $$system("dir /B ..\* | findstr "qcad..* cavecad..*"")
+    dirs = $$system("dir /B ..\* | findstr \"qcad..* cavecad..*\"")
     for (dir, $$list($$dirs)) {
         message(..\\$$dir)
         SUBDIRS += ..\\$$dir

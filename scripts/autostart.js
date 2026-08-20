@@ -195,7 +195,7 @@ function loadTranslations(addOns, splash) {
     }
 
     // load C++ translations:
-    var modules = ["qt", "assistant", "qt_help", "qcadcore", "qcadentity", "qcadgui"];
+    var modules = ["qt", "assistant", "qt_help", "cavecadcore", "cavecadentity", "cavecadgui"];
     if (RSettings.isQt(5) || RSettings.isQt(6)) {
         modules.unshift("qtbase");
     }

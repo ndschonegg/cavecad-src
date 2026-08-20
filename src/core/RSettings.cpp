@@ -651,7 +651,7 @@ QString RSettings::getLocale() {
 
 /**
  * Loads the translations for the given module.
- * \param module Module name ('qcadcore', 'qcadentity', ...)
+ * \param module Module name ('cavecadcore', 'cavecadentity', ...)
  * \param dirs List of directories to look for translation files or empty to check default directories.
  */
 void RSettings::loadTranslations(const QString& module, const QStringList& dirs) {

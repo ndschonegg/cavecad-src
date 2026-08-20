@@ -31,6 +31,6 @@ RPluginInfo RDxfPlugin::getPluginInfo() {
 
 #if QT_VERSION < 0x050000
 QT_BEGIN_NAMESPACE
-Q_EXPORT_PLUGIN2(qcaddxf, RDxfPlugin)
+Q_EXPORT_PLUGIN2(cavecaddxf, RDxfPlugin)
 QT_END_NAMESPACE
 #endif
