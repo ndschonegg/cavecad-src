@@ -1,0 +1,120 @@
+name: Linux AppImage
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [cavecad]
+    paths-ignore:
+      - '.github/workflows/windows.yml'
+
+env:
+  QT_VERSION: 6.10.3
+  QT_ARCH: linux_gcc_64
+  QTJSAPI_REV: c82731320fdc7b61dae56d4cf046bac9376bb2b4
+  QCADJSAPI_REV: 2b2b0e86328416dc57ca57a035e10d5dfd919db6
+
+jobs:
+  appimage:
+    runs-on: ubuntu-latest
+    # Built inside 22.04 so the AppImage's glibc floor stays at 2.35 no matter
+    # which image GitHub's ubuntu-latest points at.
+    container: ubuntu:22.04
+
+    steps:
+      - name: Install build dependencies
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends \
+            build-essential cmake ninja-build git ca-certificates curl file \
+            python3 python3-pip python3-venv desktop-file-utils \
+            libgl1-mesa-dev libglu1-mesa-dev libxkbcommon-dev libxkbcommon-x11-0 \
+            libfontconfig1-dev libfreetype6-dev libx11-xcb-dev libxcb-cursor0 \
+            libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
+            libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libxcb-xkb1 \
+            libxrender1 libsm6 libice6 zlib1g-dev
+
+      - uses: actions/checkout@v4
+
+      - name: Install Qt ${{ env.QT_VERSION }}
+        run: |
+          pip3 install --quiet aqtinstall
+          python3 -m aqt install-qt linux desktop "$QT_VERSION" "$QT_ARCH" -m qt5compat -O /opt/Qt
+
+      - name: Fetch JS API sources
+        run: |
+          cd "$(dirname "$GITHUB_WORKSPACE")"
+          # qcadjsapi expects the CaveCAD tree as a sibling directory named "cavecad"
+          ln -sfn "$GITHUB_WORKSPACE" cavecad
+          git clone -q https://github.com/qcad/qtjsapi.git qtjsapi
+          git -C qtjsapi checkout -q "$QTJSAPI_REV"
+          git clone -q https://github.com/qcad/qcadjsapi.git qcadjsapi
+          git -C qcadjsapi checkout -q "$QCADJSAPI_REV"
+          git -C qcadjsapi apply --verbose "$GITHUB_WORKSPACE/tools/qcadjsapi-cavecad.patch"
+
+      - name: Build CaveCAD
+        run: |
+          export QTDIR="/opt/Qt/$QT_VERSION/gcc_64"
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_QT6=ON -DCMAKE_PREFIX_PATH="$QTDIR"
+          cmake --build build
+
+      - name: Build qtjsapi
+        run: |
+          export QTDIR="/opt/Qt/$QT_VERSION/gcc_64"
+          cd "$(dirname "$GITHUB_WORKSPACE")"
+          cmake -S qtjsapi -B qtjsapi/build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$QTDIR"
+          cmake --build qtjsapi/build
+          cp qtjsapi/build/out/libqtjsapi.so "$GITHUB_WORKSPACE/release/"
+
+      - name: Build cavecadjsapi plugin
+        run: |
+          export QTDIR="/opt/Qt/$QT_VERSION/gcc_64"
+          cd "$(dirname "$GITHUB_WORKSPACE")"
+          cmake -S qcadjsapi -B qcadjsapi/build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$QTDIR"
+          cmake --build qcadjsapi/build
+
+      - name: Assemble AppDir
+        run: |
+          # CaveCAD resolves scripts, fonts and plugins relative to the executable,
+          # so the whole runtime tree lives in usr/bin next to cavecad-bin.
+          mkdir -p AppDir/usr/bin AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/256x256/apps
+          cp -a release/. AppDir/usr/bin/
+          cp -a plugins AppDir/usr/bin/
+          for d in scripts libraries patterns linetypes fonts themes ts defaults; do
+            [ -d "$d" ] && cp -a "$d" AppDir/usr/bin/
+          done
+          sed 's/^Exec=cavecad /Exec=cavecad-bin /' cavecad.desktop > AppDir/usr/share/applications/org.cavecad.CaveCAD.desktop
+          cp scripts/cavecad_icon.png AppDir/usr/share/icons/hicolor/256x256/apps/org.cavecad.CaveCAD.png
+          cat > AppDir/AppRun <<'SH'
+          #!/bin/bash
+          APPDIR="$(dirname "$(readlink -f "$0")")"
+          export LD_LIBRARY_PATH="$APPDIR/usr/lib:$APPDIR/usr/bin:$LD_LIBRARY_PATH"
+          export QT_PLUGIN_PATH="$APPDIR/usr/plugins"
+          exec "$APPDIR/usr/bin/cavecad-bin" "$@"
+          SH
+          chmod +x AppDir/AppRun
+
+      - name: Build AppImage
+        run: |
+          export QTDIR="/opt/Qt/$QT_VERSION/gcc_64"
+          export QMAKE="$QTDIR/bin/qmake"
+          export PATH="$QTDIR/bin:$PATH"
+          curl -sSLo linuxdeploy https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          curl -sSLo linuxdeploy-plugin-qt https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy linuxdeploy-plugin-qt
+          # no FUSE inside the container, so the tools must unpack themselves
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          export OUTPUT=CaveCAD-x86_64.AppImage
+          ./linuxdeploy --appdir AppDir \
+            --executable AppDir/usr/bin/cavecad-bin \
+            --desktop-file AppDir/usr/share/applications/org.cavecad.CaveCAD.desktop \
+            --icon-file AppDir/usr/share/icons/hicolor/256x256/apps/org.cavecad.CaveCAD.png \
+            --custom-apprun AppDir/AppRun \
+            --plugin qt --output appimage
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: cavecad-linux-x86_64-appimage
+          path: CaveCAD-x86_64.AppImage
+          if-no-files-found: error

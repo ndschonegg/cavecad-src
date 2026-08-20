@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [cavecad]
+    paths-ignore:
+      - '.github/workflows/linux.yml'
 
 env:
   QT_VERSION: 6.10.3
