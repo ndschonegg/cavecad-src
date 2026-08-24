@@ -3509,10 +3509,66 @@ function openFiles(args, createNew, close) {
 
     // create new document if no files were loaded:
     if (!foundFile && createNew===true) {
-        var fileNewAction = RGuiAction.getByScriptFile("scripts/File/NewFile/NewFile.js");
-        if (!isNull(fileNewAction)) {
-            fileNewAction.slotTrigger();
+        // CaveCAD: an add-on may claim the empty start instead, to put a
+        // cave launcher in front of the user rather than a blank drawing
+        // they did not ask for (see caveLauncherClaimsStart below).
+        if (!caveLauncherClaimsStart()) {
+            var fileNewAction = RGuiAction.getByScriptFile("scripts/File/NewFile/NewFile.js");
+            if (!isNull(fileNewAction)) {
+                fileNewAction.slotTrigger();
+            }
         }
+    }
+}
+
+/**
+ * CaveCAD: offers the empty start to a launcher add-on.
+ *
+ * Starting the application with nothing to open used to mean one thing:
+ * create a document. In a cave mapping build that is the wrong default --
+ * every new document is poured full of the NSS template, so the app opens
+ * on a map of nothing, for a cave nobody named. An add-on that defines the
+ * global caveShowLauncher() gets offered the moment instead, and returning
+ * true from it means "I have taken care of the start; create nothing".
+ *
+ * The launcher is expected to show its window LATER (a queued call), not
+ * from inside this function: startup is still running here, and a modal
+ * dialog opened now would block the rest of it.
+ *
+ * Everything about this is conservative. No add-on, no setting, a headless
+ * or scripted run, or a launcher that throws, all fall through to the stock
+ * behaviour of creating a document -- the one thing that must keep working
+ * is the plain start.
+ *
+ * \return true if the launcher claimed the start and no document should be
+ * created.
+ */
+function caveLauncherClaimsStart() {
+    if (RSettings.getBoolValue("Startup/ShowCaveLauncher", true)!==true) {
+        return false;
+    }
+    if (typeof(caveShowLauncher)!=="function") {
+        return false;
+    }
+
+    // Never in a run that has no user in front of it: -no-gui and -no-show
+    // are headless, and a run driven by -autostart or -exec is a script
+    // doing a job (the test suites are exactly this) -- a window waiting
+    // for a click would hang it.
+    var args = RSettings.getOriginalArguments();
+    var headless = ["-no-gui", "-no-show", "-autostart", "-exec", "-quit"];
+    for (var i=0; i<headless.length; i++) {
+        if (args.contains(headless[i])) {
+            return false;
+        }
+    }
+
+    try {
+        return caveShowLauncher()===true;
+    }
+    catch (e) {
+        qWarning("cave launcher failed to start: " + e);
+        return false;
     }
 }
 
