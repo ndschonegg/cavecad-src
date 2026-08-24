@@ -27,7 +27,8 @@ fi
 
 ditto "$SRC/debug/CaveCAD.app" "$STAGE"
 
-mkdir -p "$STAGE/Contents/Frameworks" "$STAGE/Contents/PlugIns/designer"
+mkdir -p "$STAGE/Contents/Frameworks" "$STAGE/Contents/PlugIns/designer" \
+         "$STAGE/Contents/PlugIns/imageformats"
 cp "$SRC"/debug/libcavecad*.dylib \
    "$SRC"/debug/libspatialindexnavel.dylib \
    "$SRC"/debug/libopennurbs.dylib \
@@ -36,6 +37,18 @@ cp "$SRC"/debug/libcavecad*.dylib \
 cp "$SRC"/plugins/libcavecad*.dylib "$STAGE/Contents/PlugIns/"
 cp "$SRC"/plugins/designer/libcavecadcustomwidgets.dylib \
    "$STAGE/Contents/PlugIns/designer/"
+
+# Qt's own image format plugins. Without these the application can read
+# only the formats built into QtGui (PNG, BMP, PPM...) -- no JPEG at all,
+# which is the format survey sketches are scanned to and photographs are
+# taken in. A cave's scans/ folder would insert as nothing.
+QT_PLUGINS="$(brew --prefix qtbase 2>/dev/null)/share/qt/plugins"
+if [ -d "$QT_PLUGINS/imageformats" ]; then
+    cp "$QT_PLUGINS"/imageformats/*.dylib \
+       "$STAGE/Contents/PlugIns/imageformats/" 2>/dev/null || true
+else
+    echo "warning: Qt image format plugins not found; JPEG will not load" >&2
+fi
 
 for d in scripts patterns linetypes fonts ts themes libraries defaults; do
     ditto "$SRC/$d" "$STAGE/Contents/Resources/$d"
