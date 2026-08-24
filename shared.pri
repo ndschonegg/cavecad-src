@@ -37,6 +37,11 @@ greaterThan(QT_MAJOR_VERSION, 5) {
 
 DEFINES += QCAD_DLL
 
+# CaveCAD: same version macro the CMake build defines, read from the
+# VERSION file at the repository root so the two builds cannot drift.
+CAVECAD_VERSION = $$cat($$PWD/VERSION, lines)
+DEFINES += CAVECAD_VERSION_STRING=\\\"$$first(CAVECAD_VERSION)\\\"
+
 # output directory:
 CONFIG(debug, debug|release) {
     ROUTDIR = debug

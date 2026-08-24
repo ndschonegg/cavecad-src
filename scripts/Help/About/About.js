@@ -97,16 +97,19 @@ About.prototype.beginEvent = function() {
     EAction.activateMainWindow();
 };
 
-About.prototype.initAboutApp = function(textBrowser) {
-    var version = RSettings.getVersionString();
-    var versionComplete = "%1.%2.%3.%4"
-        .arg(RSettings.getMajorVersion())
-        .arg(RSettings.getMinorVersion())
-        .arg(RSettings.getRevisionVersion())
-        .arg(RSettings.getBuildVersion());
+// CaveCAD: where the complete source code lives, as GPLv3 section 6 requires
+// it to be offered. Shown in the About dialog and referenced by NOTICE.md.
+About.sourceUrl = "https://github.com/ndschonegg/cavecad-src";
 
+About.prototype.initAboutApp = function(textBrowser) {
+    // CaveCAD: the application's own version (VERSION at the root of the
+    // source tree, via main.cpp). The QCAD framework version it is built
+    // on is reported separately below.
+    var versionComplete = qApp.applicationVersion;
+    var frameworkVersion = RSettings.getVersionString();
+
+    // a plugin may override the version shown (see initAboutPlugins):
     if (!isNull(this.version)) {
-        version = "";
         versionComplete = this.version;
     }
 
@@ -118,18 +121,22 @@ About.prototype.initAboutApp = function(textBrowser) {
             + "<hr/>";
             html +=
               "<table border='0'><tr>"
-            + "<td><b>" + qsTr("Version:") + "</b> </td><td>%1 %2</td>"
-              .arg(versionComplete)
-              .arg(version.length>0 ? "("+version+")" : "")
+            + "<td><b>" + qsTr("Version:") + "</b> </td><td>%1</td>".arg(versionComplete)
             + "</tr><tr>"
-            + "<td><b>" + qsTr("Internet:") + "</b> </td><td><a href='https://%1'>%1</a></td>".arg(qApp.organizationDomain)
+            + "<td><b>" + qsTr("Based on:") + "</b> </td><td>" + qsTr("QCAD Community Edition %1").arg(frameworkVersion) + " (<a href='https://qcad.org'>qcad.org</a>)</td>"
+            + "</tr><tr>"
+            + "<td><b>" + qsTr("Source Code:") + "</b> </td><td><a href='%1'>%1</a></td>".arg(About.sourceUrl)
             + "</tr><tr>"
             + "<td><b>" + qsTr("Build Date:") + "</b> </td><td>%1</td>".arg(RSettings.getReleaseDate())
             + "</tr><tr>"
-            + "<td><b>" + qsTr("Revision:") + "</b> </td><td>%1</td>".arg(RSettings.getRevisionString().left(7))
-            + "</tr><tr>"
             + "<td><b>" + qsTr("Qt Version:") + "</b> </td><td>%1</td>".arg(RSettings.getQtVersionString())
             + "</tr>";
+            // CaveCAD: an empty revision row (a build made outside git) said
+            // nothing, so it is only shown when there is a revision:
+            var rev = RSettings.getRevisionString().left(7);
+            if (rev.length!==0) {
+                html += "<tr><td><b>" + qsTr("Revision:") + "</b> </td><td>%1</td>".arg(rev) + "</tr>";
+            }
             var bca = RS.getBuildCpuArchitecture();
             if (bca.length!==0) {
                 html += "<tr><td><b>" + qsTr("Architecture:") + "</b> </td><td>%1</td>".arg(bca) + "</tr>";
@@ -142,11 +149,15 @@ About.prototype.initAboutApp = function(textBrowser) {
             html += "</table>";
 
             html += "<hr/>"
-            + "<p>" + qsTr("%1 is an application for computer-aided design (CAD).").arg(this.applicationName) + "</p>"
+            + "<p>" + qsTr("%1 is a 2D CAD application for drawing cave surveys and maps.").arg(this.applicationName) + "</p>"
             + "<p/>";
 
             if (this.applicationName!=="QCAD" && this.applicationName!=="QCAD Community Edition") {
-                html += "<p>" + qsTr("%1 is based on QCAD, a free (open source) software.").arg(this.applicationName) + "</p>";
+                html += "<p>" + qsTr("%1 is based on QCAD Community Edition, free (open source) software by RibbonSoft GmbH. %1 is not affiliated with or endorsed by RibbonSoft GmbH.").arg(this.applicationName) + "</p>"
+                     + "<p>" + qsTr("%1 is free software under the <a href='%2'>GNU General Public License version 3</a>. The complete source code, including every modification made for %1, is available at <a href='%3'>%3</a>.")
+                       .arg(this.applicationName)
+                       .arg("https://www.gnu.org/licenses/gpl-3.0.html")
+                       .arg(About.sourceUrl) + "</p>";
             }
             else {
                 html += "<p>" + qsTr("%1 is free (open source) software.").arg("QCAD") + "<br/>"
@@ -158,9 +169,10 @@ About.prototype.initAboutApp = function(textBrowser) {
             + "<p/>"
             + "<p>" + qsTr("All brand or product names are trademarks or registered trademarks of their respective holders.") + "</p>"
             + "<p/>"
-            + "<p>© 1994-2026 RibbonSoft, GmbH.</p>"
+            + "<p>" + qsTr("QCAD and the QCAD Application Framework: © 1994-2026 RibbonSoft, GmbH.") + "</p>"
+            + "<p>" + qsTr("Modifications for %1: © 2026 the %1 authors.").arg(this.applicationName) + "</p>"
             + "<p>" + qsTr("Portions of this software © %1 The Qt Company Ltd.").arg("2008-2026") + "</p>"
-            + "<p>" + qsTr("Qt ships with QCAD under the <a href='%1'>LGPL Open Source license</a> which confers various rights to you as the user, including the right to recompile the Qt libraries for your platform. To do that follow the <a href='%2'>documentation shown on the Qt website</a>.").arg("https://www.gnu.org/licenses/lgpl-3.0.html").arg("https://doc.qt.io/qt-5/build-sources.html") + "</p>"
+            + "<p>" + qsTr("Qt ships with %1 under the <a href='%2'>LGPL Open Source license</a> which confers various rights to you as the user, including the right to recompile the Qt libraries for your platform. To do that follow the <a href='%3'>documentation shown on the Qt website</a>.").arg(this.applicationName).arg("https://www.gnu.org/licenses/lgpl-3.0.html").arg("https://doc.qt.io/qt-6/build-sources.html") + "</p>"
             + "<p>" + qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.") + "</p>"
             + "<p/>"
             + "</body></html>";
@@ -370,7 +382,16 @@ About.prototype.initAboutScripts = function(textBrowser) {
                     path = scriptsDir.relativeFilePath(path);
                 }
             }
-            sorted.push([addOn.getClassName(), path]);
+            // CaveCAD: an add-on that carries its own version number (a
+            // 'version' property on its class, e.g. CaveSurvey.version)
+            // reports it here. Add-ons without one are listed as before.
+            var className = addOn.getClassName();
+            var addOnVersion = "";
+            if (typeof(global[className])!=='undefined' && !isNull(global[className].version)) {
+                addOnVersion = global[className].version;
+            }
+
+            sorted.push([className, path, addOnVersion]);
         }
 
         sorted = sorted.sort(function(a,b) { return a[1].localeCompare(b[1]); });
@@ -378,7 +399,9 @@ About.prototype.initAboutScripts = function(textBrowser) {
         html += "<table border='0' width='100%'>";
 
         for (i=0; i<sorted.length; i++) {
-            html += "<tr><td>" + sorted[i][0] + "</td><td>" + sorted[i][1] + "</td></tr>"
+            html += "<tr><td>" + sorted[i][0] + "</td>"
+                 +  "<td>" + sorted[i][2] + "</td>"
+                 +  "<td>" + sorted[i][1] + "</td></tr>"
         }
     }
 

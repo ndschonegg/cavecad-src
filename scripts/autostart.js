@@ -37,7 +37,10 @@ for (var i=1; i<10; i++) {
  */
 function version() {
     print();
-    print("Version: " + RSettings.getVersionString());
+    // CaveCAD: the application's own version first, the QCAD framework
+    // version it is built on second:
+    print("Version: " + qApp.applicationVersion);
+    print("QCAD Framework Version: " + RSettings.getVersionString());
     print("Qt Version: " + RSettings.getQtVersionString());
     print("Release Date: " + RSettings.getReleaseDate());
     print();
@@ -338,6 +341,60 @@ function uninitAddOns(addOns) {
 }
 
 /**
+ * CaveCAD: paints the application version into the lower right corner of
+ * the given splash pixmap. The number comes from qApp.applicationVersion,
+ * which main.cpp sets from the VERSION file at the repository root.
+ *
+ * The @2x image carries a device pixel ratio of 2 and QPainter honors it,
+ * so the coordinates below are logical pixels of the 375x248 design.
+ *
+ * \param pixmap the splash screen pixmap, modified in place.
+ */
+function drawSplashVersion(pixmap) {
+    if (isNull(pixmap) || pixmap.isNull()) {
+        return;
+    }
+
+    var version = qApp.applicationVersion;
+    if (isNull(version) || version.length===0) {
+        return;
+    }
+
+    var dpr = pixmap.devicePixelRatio();
+    if (isNull(dpr) || dpr<=0) {
+        dpr = 1;
+    }
+    var w = pixmap.width() / dpr;
+    var h = pixmap.height() / dpr;
+
+    var painter = new QPainter();
+    if (!painter.begin(pixmap)) {
+        return;
+    }
+
+    painter.setRenderHint(QPainter.Antialiasing, true);
+    painter.setRenderHint(QPainter.TextAntialiasing, true);
+
+    // Space Grotesk is the splash typeface. Where it is not installed Qt
+    // substitutes, which is why the fallbacks are named explicitly:
+    var font = new QFont("Space Grotesk");
+    font.setStyleHint(QFont.SansSerif);
+    font.setPixelSize(13);
+    font.setBold(true);
+    painter.setFont(font);
+    painter.setPen(new QPen(new QColor("#1c2733")));
+
+    // margins match the artwork: 28px right, 22px bottom of the 750px design:
+    painter.drawText(
+        new QRectF(0, 0, w - 14, h - 11),
+        Qt.AlignRight | Qt.AlignBottom,
+        version
+    );
+
+    painter.end();
+}
+
+/**
  * Loads the add-ons and starts QCAD.
  */
 function main() {
@@ -519,8 +576,23 @@ function main() {
         }
 
         var pixmap = new QPixmap(fn);
+
+        // CaveCAD: the version is painted onto the splash image at start up
+        // rather than baked into the PNG, so a version bump never means
+        // re-rendering artwork.
+        drawSplashVersion(pixmap);
+
         splash = new QSplashScreen(pixmap);
         splash.objectName = "Splash";
+
+        // CaveCAD: the status messages showMessage() writes into the lower
+        // left corner use the splash's own font, which is the desktop
+        // default and too heavy for this artwork. Built from the family
+        // name rather than copied from splash.font -- the QFont copy
+        // constructor crashes the script engine.
+        var splashFont = new QFont(splash.font.family());
+        splashFont.setPixelSize(11);
+        splash.font = splashFont;
 
         // move splash to same screen where main app was last seen:
         var screenIndex = RSettings.getIntValue("Appearance/Screen", -1);

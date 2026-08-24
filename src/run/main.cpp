@@ -18,6 +18,12 @@
  */
 #include <stdio.h>
 
+// CaveCAD: normally defined by the build (see VERSION at the repository
+// root). The fallback keeps a hand-rolled build compiling.
+#ifndef CAVECAD_VERSION_STRING
+#define CAVECAD_VERSION_STRING "0.0.0.0"
+#endif
+
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -146,7 +152,11 @@ int main(int argc, char *argv[]) {
     qApp->setOrganizationName("QCAD");
     qApp->setOrganizationDomain("QCAD.org");
     qApp->setApplicationName("CaveCAD");
-    qApp->setApplicationVersion(RSettings::getVersionString());
+    // CaveCAD: CaveCAD's own version, from the VERSION file at the
+    // repository root via CAVECAD_VERSION_STRING. RSettings::getVersionString()
+    // stays the QCAD framework version and still drives the configuration
+    // file's version stamp; this is the number shown to the user.
+    qApp->setApplicationVersion(CAVECAD_VERSION_STRING);
 
     // alternative path for QCAD3.ini:
     for (int i=0; i<argc; i++) {
